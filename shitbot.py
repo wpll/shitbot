@@ -110,7 +110,7 @@ command list:
         now = dt.datetime.now()
         year=sum=int(now.year) - int(2000)
         mon=(now.month)
-        if (year and mon == now.year and now.month): # this doesnt work 
+        if (year,mon == now.year,now.month): # this doesnt work because the version isnt really a thing
             print("no updates found")
         else:
             check_UpdatesFoundInstallPrompt=input("updates found\ninstall? (y/n): ")
