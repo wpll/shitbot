@@ -4,6 +4,7 @@ import datetime as dt
 import sys
 import time
 import math
+import threading
 
 def shitbot():
     
@@ -15,22 +16,10 @@ def shitbot():
             sys.stdout.write("\r" + animation[i % len(animation)])
             sys.stdout.flush()
         print("\n")
-
-        
-    def installanimation():
-        #not sure how to make it actually install shit lmfao
-        print("installing updates...")
-        animation = ["[#.........]","[##........]", "[###.......]", "[####......]", "[#####.....]", "[######....]", "[#######...]", "[########..]", "[#########.]", "[##########]"]
-        for i in range(len(animation)):
-            time.sleep(0.5)
-            sys.stdout.write("\r" + animation[i % len(animation)])
-            sys.stdout.flush()
-        print("\ndone")
-        print("\n")
-
-        
+    
     def shitbot_MainMenu():
-        print("welcome to shitbot version 16.2")
+        ver=open("version","r").readlines(0)
+		print("Welcome to shitbot version {}".format(ver[0]))
         userCommandInputWelcome=input("Enter a command: ")
         if(userCommandInputWelcome.startswith("/shitbot")):
             if(userCommandInputWelcome.endswith("help")):
@@ -95,12 +84,8 @@ command list:
 
         
     def shitbot_MenuOption_Version():
-        #make the version into a static number
-        #that only changes when "/shitbot check : y" is done
-        now = dt.datetime.now()
-        y=sum=int(now.year) - int(2000)
-        m=(now.month)
-        print("current shitbot version is {}.{}\n".format(y,m))
+        ver=open("version","r").readlines(0)
+        print("\ncurrent shitbot version is {}".format(ver[0]))
         input("press enter\n")
         shitbot_MainMenu()
 
@@ -108,15 +93,28 @@ command list:
     def shitbot_MenuOption_Check():
         loadscreen()
         now = dt.datetime.now()
-        year=sum=int(now.year) - int(2000)
+        yr=sum=int(now.year) - int(2000)
         mon=(now.month)
-        if (year,mon == now.year,now.month): # this doesnt work because the version isnt really a thing
+        t=(now.year,now.month)
+        oldver=open("version","r").readlines(0)
+        if (oldver == t):
             print("no updates found")
         else:
             check_UpdatesFoundInstallPrompt=input("updates found\ninstall? (y/n): ")
             if(check_UpdatesFoundInstallPrompt == "y"):
-                installanimation()
-                input("press enter")
+                def shitbot_InstallNewVer():
+                    open("version", "w").writelines("{}.{}".format(yr,mon))#this just replaces whats in the versions file with todays date//i havent done much testing so it might break easily idk tho
+                def animation():
+                    animation = ["[#.........]","[##........]", "[###.......]", "[####......]", "[#####.....]", "[######....]", "[#######...]", "[########..]", "[#########.]", "[##########]"]
+                    for i in range(len(animation)):
+                        time.sleep(0.5)
+                        sys.stdout.write("\r" + animation[i % len(animation)])
+                        sys.stdout.flush()
+                install=threading.Thread(name='installing', target=shitbot_InstallNewVer)
+                install.start()
+                while install.is_alive():
+                    animation()
+                input("\npress enter\n")
                 shitbot_MainMenu()
             elif(check_UpdatesFoundInstallPrompt == "n"):
                 print("not installing updates")
