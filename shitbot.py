@@ -19,7 +19,7 @@ def shitbot():
     
     def shitbot_MainMenu():
         ver=open("version","r").readlines(0)
-		print("Welcome to shitbot version {}".format(ver[0]))
+	print("Welcome to shitbot version {}".format(ver[0]))
         userCommandInputWelcome=input("Enter a command: ")
         if(userCommandInputWelcome.startswith("/shitbot")):
             if(userCommandInputWelcome.endswith("help")):
@@ -140,7 +140,7 @@ command list:
     def shitbot_MenuOption_Lockdown():
         print("placeholder")
     def shitbot_MenuOption_Exit():
-        exit
+        sys.exit()
     shitbot_MainMenu()
 shitbot()    
 
